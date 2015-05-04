@@ -17,8 +17,10 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Catalyst::Model::HTMLFormhandler",
   "PREREQ_PM" => {
+    "Catalyst" => "5.90060",
     "Module::Pluggable" => "5.1",
-    "Moose" => "2.1403"
+    "Moose" => "2.1403",
+    "Scalar::Util" => 0
   },
   "TEST_REQUIRES" => {
     "Catalyst::Test" => 0,
@@ -26,7 +28,7 @@ my %WriteMakefileArgs = (
     "HTTP::Request::Common" => 0,
     "Test::Most" => "0.34"
   },
-  "VERSION" => "0.003",
+  "VERSION" => "0.004",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -34,12 +36,14 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "Catalyst" => "5.90060",
   "Catalyst::Test" => 0,
   "ExtUtils::MakeMaker" => 0,
   "HTML::Formhandler" => 0,
   "HTTP::Request::Common" => 0,
   "Module::Pluggable" => "5.1",
   "Moose" => "2.1403",
+  "Scalar::Util" => 0,
   "Test::Most" => "0.34"
 );
 
