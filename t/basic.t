@@ -72,7 +72,7 @@ BEGIN {
     my ($self, $c) = @_;
   }
 
-  sub post_form :POST Path('') Args(0) {
+  sub post_form :POST Path('') Args(0) FormModelTarget(Form::Email) {
     my ($self, $c) = @_;
   }
 
@@ -112,6 +112,7 @@ use Catalyst::Test 'MyApp';
   ok $email->item->isa('foo');
   ok $email->is_valid;
   is $email->values->{email}, 'jjn1056@yahoo.com';
+  is $email->action, 'http://localhost/example';
 }
 
 done_testing;

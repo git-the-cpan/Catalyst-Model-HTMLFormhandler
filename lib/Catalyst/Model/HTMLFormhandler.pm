@@ -7,7 +7,7 @@ use Moose::Util::TypeConstraints ();
 extends 'Catalyst::Model';
 with 'Catalyst::Component::ApplicationAttribute';
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 has 'roles' => (
   is=>'ro',
@@ -91,8 +91,22 @@ sub build_model_adaptor {
 
     #If an action arg is passed and its a Catalyst::Action, make it a URL
     if(my $action = delete $args{action_from}) {
-      $args{action} = ref $action ? $c->uri_for($action) : $c->uri_for_action($action);
+      my @action = ref $action eq 'ARRAY' ? @$action : ($action);
+      $args{action} = ref $action ? $c->uri_for(@action) : $c->uri_for_action(@action);
     }
+
+    my $set = 0;
+    unless($args{action}) {
+      foreach my $action ($c->controller->get_action_methods) {
+        my @attrs =  map {($_ =~m/^FormModelTarget\((.+)\)$/)[0]} @{$action->attributes||[]};
+        foreach my $attr(@attrs) {
+          my @parts = (@{$c->req->captures}, @{$c->req->args});
+          $set=$c->uri_for($c->controller->action_for($action), (scalar @parts ? \@parts : ())) if ref($self) =~/$attr$/;
+        }
+      }
+    }
+
+    $args{action} = $set if $set;
 
     if(my $form = $c->stash->{$id}) {
       $form->process( %args ) if keys(%args);
@@ -249,7 +263,8 @@ It also will add the schema argument if you set a schema_model_name.
 We offer two additional bit of useful suger:
 
 If you pass argument 'action_from' with a value of an action object or an action 
-private name that will set the form action value.
+private name that will set the form action value.  If 'action_from' is an arrayref
+we dereference it when building the url.
 
 By default if the request is a POST, we will process the request arguments and
 return a form object that you can test for validity.  If you don't want this
@@ -297,6 +312,20 @@ influence how the form object is setup.
 =head2 no_auto_process
 
 Turns off the call to ->process when the request is a POST.
+
+=head2 action_from
+
+Shortcut to create the action value of the form.  If an object, we set 'action'
+from $c->uri_for($object).  If its an arrayref from $c->uri_for( @$action_from).
+
+=head1 ACTION ATTRIBUTES.
+
+=head2 FormModelTarget( $model)
+
+When used on an action, sets that action as the target of the form action.  This
+is a bit experimental.  We get any needed captures and arguments from the current
+request, this this only works if the target action has the same number of needed
+args and captures.
 
 =head1 AUTHOR
  
