@@ -6,6 +6,7 @@ build_requires:
   Catalyst::Test: '0'
   HTML::Formhandler: '0'
   HTTP::Request::Common: '0'
+  Scalar::Util: '0'
   Test::Most: '0.34'
 configure_requires:
   ExtUtils::MakeMaker: '0'
@@ -25,4 +26,4 @@ resources:
   bugtracker: https://github.com/jjn1056/Catalyst-Model-HTMLFormhandler/issues
   homepage: https://github.com/jjn1056/Catalyst-Model-HTMLFormhandler
   repository: https://github.com/jjn1056/Catalyst-Model-HTMLFormhandler.git
-version: '0.005'
+version: '0.006'

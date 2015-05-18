@@ -26,9 +26,10 @@ my %WriteMakefileArgs = (
     "Catalyst::Test" => 0,
     "HTML::Formhandler" => 0,
     "HTTP::Request::Common" => 0,
+    "Scalar::Util" => 0,
     "Test::Most" => "0.34"
   },
-  "VERSION" => "0.005",
+  "VERSION" => "0.006",
   "test" => {
     "TESTS" => "t/*.t"
   }
